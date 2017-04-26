@@ -1,4 +1,5 @@
 import Constants
+#DRAGON’s COPY
 from Target import TargetType, Target
 
 from abc import ABCMeta, abstractmethod, abstractproperty
@@ -91,6 +92,7 @@ class Swope(Telescope):
             TargetType.Supernova: self.compute_sn_exposure,
             TargetType.Template: self.compute_template_exposure,
             TargetType.Standard: self.compute_standard_exposure
+            TargetType.GW: self.compute_GW_exposure
         }
     
     def set_targets(self, targets):
@@ -98,6 +100,20 @@ class Swope(Telescope):
         
     def get_targets(self):
         return self.targets
+   
+    def compute_GW_exposure(self, GW):
+        exposures = {}
+        
+        c = 120
+        
+        exposures.update({Constants.u_band: c})
+        exposures.update({Constants.B_band: c})
+        exposures.update({Constants.V_band: c})
+        exposures.update({Constants.g_band: c})
+        exposures.update({Constants.r_band: c})
+        exposures.update({Constants.i_band: c})
+        
+        GW.exposures = exposures
     
     def compute_sn_exposure(self, sn):
         exposures = {}
@@ -145,12 +161,12 @@ class Swope(Telescope):
         s_to_n = 100
         
         # Don't know what the apparent mag should be?
-        exposures.update({Constants.u_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.apparent_mag, self.filters[Constants.u_band]))})
-        exposures.update({Constants.B_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.apparent_mag, self.filters[Constants.B_band]))})
-        exposures.update({Constants.V_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.apparent_mag, self.filters[Constants.V_band]))})
-        exposures.update({Constants.g_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.apparent_mag, self.filters[Constants.g_band]))})
-        exposures.update({Constants.r_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.apparent_mag, self.filters[Constants.r_band]))})
-        exposures.update({Constants.i_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.apparent_mag, self.filters[Constants.i_band]))})
+        exposures.update({Constants.u_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.ApparentMag, self.filters[Constants.u_band]))})
+        exposures.update({Constants.B_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.ApparentMag, self.filters[Constants.B_band]))})
+        exposures.update({Constants.V_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.ApparentMag, self.filters[Constants.V_band]))})
+        exposures.update({Constants.g_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.ApparentMag, self.filters[Constants.g_band]))})
+        exposures.update({Constants.r_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.ApparentMag, self.filters[Constants.r_band]))})
+        exposures.update({Constants.i_band: self.round_to_num(Constants.round_to, self.time_to_S_N(s_to_n, std.ApparentMag, self.filters[Constants.i_band]))})
         
         # Finally, for standards round exps and don't go less than 10s, don't go more than 600s on Swope
         # Round to nearest "exp_round_to" secs
@@ -290,6 +306,7 @@ class Nickel(Telescope):
             TargetType.Supernova: self.compute_sn_exposure,
             TargetType.Template: self.compute_template_exposure,
             TargetType.Standard: self.compute_standard_exposure
+            TargetType.GW: self.compute_GW_exposure
         }
     
     def set_targets(self, targets):
@@ -297,6 +314,19 @@ class Nickel(Telescope):
         
     def get_targets(self):
         return self.targets
+    
+    def compute_GW_exposure(self, GW):
+        exposures = {}
+        
+        c = 120
+        
+        exposures.update({Constants.B_band: c})
+        exposures.update({Constants.V_band: c})
+        exposures.update({Constants.r_prime: c})
+        exposures.update({Constants.i_prime: c})
+        
+        GW.exposures = exposures
+        
     
     def compute_sn_exposure(self, sn):
         exposures = {}
@@ -359,6 +389,7 @@ class Nickel(Telescope):
         exposures.update({Constants.i_prime: 1200})
         
         tmp.exposures = exposures
+
     
     def compute_exposures(self):
         for tgt in self.targets:            

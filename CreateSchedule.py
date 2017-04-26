@@ -8,7 +8,7 @@ from dateutil.parser import parse
 import argparse
 from astropy.coordinates import SkyCoord
 from astropy import units as unit
-#Dragon is awesome haha
+
 
 def main():
 
@@ -79,6 +79,9 @@ def main():
 				disc_date = parse(disc_dates[j])
 			elif types[j] == "SN":
 				target_type = TargetType.Supernova
+				disc_date = parse(disc_dates[j])
+			elif types[j] == “GW”:
+				target_type = TargetType.GW
 				disc_date = parse(disc_dates[j])
 			else:
 				raise ValueError('Unrecognized target type!')

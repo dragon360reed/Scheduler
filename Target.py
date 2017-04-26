@@ -6,6 +6,9 @@ class TargetType(Enum):
     Supernova = 1
     Template = 2
     Standard = 3
+    GW = 4
+
+#DRAGON’s Copy
 
 class Target:
     def __init__(self, name, coord, priority, target_type, observatory_lat, sidereal_radian_array, \
