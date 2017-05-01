@@ -91,7 +91,7 @@ class Swope(Telescope):
         self.exp_funcs = {
             TargetType.Supernova: self.compute_sn_exposure,
             TargetType.Template: self.compute_template_exposure,
-            TargetType.Standard: self.compute_standard_exposure
+            TargetType.Standard: self.compute_standard_exposure,
             TargetType.GW: self.compute_GW_exposure
         }
     
@@ -305,7 +305,7 @@ class Nickel(Telescope):
         self.exp_funcs = {
             TargetType.Supernova: self.compute_sn_exposure,
             TargetType.Template: self.compute_template_exposure,
-            TargetType.Standard: self.compute_standard_exposure
+            TargetType.Standard: self.compute_standard_exposure,
             TargetType.GW: self.compute_GW_exposure
         }
     

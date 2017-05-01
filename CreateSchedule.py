@@ -80,7 +80,7 @@ def main():
 			elif types[j] == "SN":
 				target_type = TargetType.Supernova
 				disc_date = parse(disc_dates[j])
-			elif types[j] == “GW”:
+			elif types[j] == "GW":
 				target_type = TargetType.GW
 				disc_date = parse(disc_dates[j])
 			else:
