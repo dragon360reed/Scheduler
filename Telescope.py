@@ -1,5 +1,4 @@
 import Constants
-#DRAGON’s COPY
 from Target import TargetType, Target
 
 from abc import ABCMeta, abstractmethod, abstractproperty
