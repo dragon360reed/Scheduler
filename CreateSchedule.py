@@ -59,7 +59,7 @@ def main():
 	disc_dates = [t[4] for t in target_data]
 	disc_mags = [float(t[5]) for t in target_data]
 	types = [t[6] for t in target_data]
-	#static_exp_times = [t[7] for t in target_data]
+	static_exp_times = [t[7] for t in target_data]
 	# This is where you would parse a new column for Static Exp Time
 	# This is where you would parse a new column for Assumed Absolute Mag
 	coords = SkyCoord(ra,dec,unit=(unit.hour, unit.deg))
@@ -100,7 +100,7 @@ def main():
 					disc_date=disc_date, 
 					apparent_mag=disc_mags[j], 
 					obs_date=obs.obs_date
-					#StaticExp_Time=static_exp_times[j]
+					StaticExp_Time=static_exp_times[j]
 				)
 				# Above is where you will put your new column values (assigned to the correct properties of the Target object) 
 			)
