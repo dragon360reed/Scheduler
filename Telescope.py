@@ -106,7 +106,7 @@ class Swope(Telescope):
 		exp_time = 120 # default to 120 seconds
 
 		if GW.static_exp_time is not None:
-			exp_time = GW.static_exp_time
+			exp_time = int(GW.static_exp_time)
 			
 		exposures.update({Constants.g_band: exp_time})
 		exposures.update({Constants.i_band: exp_time})
