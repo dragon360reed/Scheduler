@@ -154,7 +154,7 @@ class Observatory():
     def plot_results(self, good_targets, telescope_name):
         good_targets.sort(key = operator.attrgetter('starting_index'))
         length_of_night = len(self.utc_time_array) # in minutes
-
+        print(len(good_targets))
         fig = plt.figure(figsize=(10,4))
         ax1 = fig.add_subplot(111)
         ax2 = ax1.twiny()

@@ -91,7 +91,8 @@ class Swope(Telescope):
 			TargetType.Supernova: self.compute_sn_exposure,
 			TargetType.Template: self.compute_template_exposure,
 			TargetType.Standard: self.compute_standard_exposure,
-			TargetType.GW: self.compute_GW_exposure
+			TargetType.GW_Static: self.compute_GW_Static_exposure,
+			TargetType.GW_Dynamic: self.compute_GW_Dynamic_exposure
 		}
 	
 	def set_targets(self, targets):
@@ -100,19 +101,39 @@ class Swope(Telescope):
 	def get_targets(self):
 		return self.targets
 
-	def compute_GW_exposure(self, GW):
+	def compute_GW_Static_exposure(self, GW_Static):
 		exposures = {}
 		
 		exp_time = 120 # default to 120 seconds
 
-		if GW.static_exp_time is not None:
-			exp_time = int(GW.static_exp_time)
+		if GW_Static.static_exp_time is not None:
+			exp_time = GW_Static.static_exp_time
 			
 		exposures.update({Constants.g_band: exp_time})
 		exposures.update({Constants.i_band: exp_time})
 	
-		GW.exposures = exposures
+		GW_Static.exposures = exposures
+
+	def compute_GW_Dynamic_exposure(self, GW_Dynamic):
+		exposures = {}
+
+		App_Mag = GW_Dynamic.est_abs_mag + 5.0*np.log10(GW_Dynamic.host_dist_mpc*1.e6) - 5.0
+		#The reason I need to multiply Mpc by 1e5 is the log base 10 implies a need to divide by 10.
+
+		print(App_Mag)
+		#We need to compute App_Mag with above function, and assume a Signal to noise value of 30:
+
+		s_to_n = 30.
+
+		g_exp = self.time_to_S_N(s_to_n, App_Mag, self.filters[Constants.g_band])
+		i_exp = self.time_to_S_N(s_to_n, App_Mag, self.filters[Constants.i_band])
+
+		exposures.update({Constants.g_band: g_exp})
+		exposures.update({Constants.i_band: i_exp})
+
+		GW_Dynamic.exposures = exposures
 		
+		print(exposures)
 	
 	def compute_sn_exposure(self, sn):
 		exposures = {}
@@ -325,7 +346,8 @@ class Nickel(Telescope):
 			TargetType.Supernova: self.compute_sn_exposure,
 			TargetType.Template: self.compute_template_exposure,
 			TargetType.Standard: self.compute_standard_exposure,
-			TargetType.GW: self.compute_GW_exposure
+			TargetType.GW_Static: self.compute_GW_Static_exposure,
+			TargetType.GW_Dynamic: self.compute_GW_Dynamic_exposure
 		}
 	
 	def set_targets(self, targets):
@@ -334,19 +356,37 @@ class Nickel(Telescope):
 	def get_targets(self):
 		return self.targets
 	
-	def compute_GW_exposure(self, GW):
+	def compute_GW_Static_exposure(self, GW_Static):
 		exposures = {}
 		
 		exp_time = 120 # default to 120 seconds
 
-		if GW.static_exp_time is not None:
-			exp_time = GW.static_exp_time
+		if GW_Static.static_exp_time is not None:
+			exp_time = GW_Static.static_exp_time
 			
 		exposures.update({Constants.B_band: exp_time})
 		exposures.update({Constants.V_band: exp_time})
 	
-		GW.exposures = exposures
+		GW_Static.exposures = exposures
+
+	def compute_GW_Dynamic_exposure(self, GW_Dynamic):
 		exposures = {}
+
+		App_Mag = GW_Dynamic.est_abs_mag + 5.0*np.log10(GW_Dynamic.host_dist_mpc*1.e6) - 5.0
+
+		#AbsMag is t[8], and Host_Dist t[9]
+		#We need to compute App_Mag t[11] with above function, and assume a S_N value of 30:
+
+		s_to_n = 30.
+
+		B_exp = self.time_to_S_N(s_to_n, App_Mag, self.filters[Constants.B_band])
+		V_exp = self.time_to_S_N(s_to_n, App_Mag, self.filters[Constants.V_band])
+
+		exposures.update({Constants.B_band: B_exp})
+		exposures.update({Constants.V_band: V_exp})
+
+		GW_Dynamic.exposures = exposures
+
 
 	def compute_sn_exposure(self, sn):
 		exposures = {}

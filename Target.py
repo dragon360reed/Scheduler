@@ -8,21 +8,25 @@ class TargetType(Enum):
     Supernova = 1
     Template = 2
     Standard = 3
-    GW = 4
+    GW_Static = 4
+    GW_Dynamic = 5
 
 #DRAGON’s Copy
 
 class Target:
     def __init__(self, name, coord, priority, target_type, observatory_lat, sidereal_radian_array, \
-                 disc_date=None, apparent_mag=None, obs_date=None, StaticExp_Time=None):
+                 disc_date=None, apparent_mag=None, obs_date=None, Static_Exp_Time=None, Est_Abs_Mag=None, Host_Dist_Mpc=None):
         # Provided by Constructor
         self.name = name
         self.coord = coord
         self.priority = priority
         self.type = target_type
         self.disc_date = disc_date
-        self.apparent_mag = apparent_mag
         self.obs_date = obs_date
+        self.static_exp_time = Static_Exp_Time #set by human, or default to 120 sec
+        self.apparent_mag = apparent_mag #Computed by assumed absolute Mag and distance to host galaxy
+        self.est_abs_mag = Est_Abs_Mag
+        self.host_dist_mpc = Host_Dist_Mpc
         
         # Computed by Constructor
         self.raw_airmass_array = self.compute_airmass(observatory_lat, sidereal_radian_array)
@@ -37,7 +41,7 @@ class Target:
         self.total_good_air_mass = 9999 # Proxy for elevation
         self.scheduled_time_array = None # Airmass plot abscissa
         self.scheduled_airmass_array = None # Airmass plot ordinate
-        self.static_exp_time = StaticExp_Time
+        
     
     def compute_airmass(self, observatory_lat, sidereal_radian_array):
         n = len(sidereal_radian_array)

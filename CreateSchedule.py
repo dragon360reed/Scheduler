@@ -59,11 +59,15 @@ def main():
 	disc_dates = [t[4] for t in target_data]
 	disc_mags = [float(t[5]) for t in target_data]
 	types = [t[6] for t in target_data]
-	static_exp_times = [t[7] for t in target_data]
+	static_exp_times = [float(t[7]) for t in target_data]
+	Est_Abs_Mag = [float(t[8]) for t in target_data]
+	Host_Dist_Mpc = [float(t[9]) for t in target_data]
+	#dynamic_exp_times = [t[10] for t in target_data]
+	#App_Mag = [t[11] for t in target_data]
 
-	#print(static_exp_times)
-	# This is where you would parse a new column for Static Exp Time
-	# This is where you would parse a new column for Assumed Absolute Mag
+	#App_Mag is an empty list. So is dynamic exposure times. 
+	#No data is actually in these columns yet.
+
 	coords = SkyCoord(ra,dec,unit=(unit.hour, unit.deg))
 
 	for i in range(len(observatory_telescopes)):
@@ -85,8 +89,11 @@ def main():
 			elif types[j] == "SN":
 				target_type = TargetType.Supernova
 				disc_date = parse(disc_dates[j])
-			elif types[j] == "GW":
-				target_type = TargetType.GW
+			elif types[j] == "GW_Static":
+				target_type = TargetType.GW_Static
+				disc_date = parse(disc_dates[j])
+			elif types[j] == "GW_Dynamic":
+				target_type = TargetType.GW_Dynamic
 				disc_date = parse(disc_dates[j])
 			else:
 				raise ValueError('Unrecognized target type!')
@@ -102,9 +109,14 @@ def main():
 					disc_date=disc_date, 
 					apparent_mag=disc_mags[j], 
 					obs_date=obs.obs_date,
-					StaticExp_Time=static_exp_times[j]
+					Static_Exp_Time=static_exp_times[j],
+					Est_Abs_Mag=Est_Abs_Mag[j],
+					Host_Dist_Mpc=Host_Dist_Mpc[j]
+					#Dynamic_Exp_Time=dynamic_exp_times[j],
+					#App_Mag=App_Mag[j]
 				)
 				# Above is where you will put your new column values (assigned to the correct properties of the Target object) 
+				#Dynamic exposure times/apparent mag are not actually ever in input file, though.
 			)
 
 			obs.telescopes[tele_keys[i]].set_targets(targets)
